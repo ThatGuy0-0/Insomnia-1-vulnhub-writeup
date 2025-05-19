@@ -1,2 +1,1 @@
-# Insomnia-1-vulnhub-writeup
-A vulnerable VM focused on web exploitation and privilege escalation through misconfigured scripts and services.
+![Alt text](C:\Users\Fmeas\Pictures\Screenshots\Screenshot (160).png)
