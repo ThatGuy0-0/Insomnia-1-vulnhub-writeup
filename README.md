@@ -29,7 +29,7 @@ Insomnia is a beginner to intermediate level boot2root machine hosted on VulnHub
 Basic host discovery and port scanning was done using <code>nmap</code>.
 </blockquote>
 
-<img src="images/Screenshots%20(160).png" alt="Nmap Scan" width="700"/>
+<pre>"images/Screenshot%20(160).png</pre>
 
 <blockquote>
 Port 80 is open. Navigating to the IP in browser leads to a custom webpage.
