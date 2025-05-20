@@ -1,5 +1,7 @@
 Scan for all the IP addresses connected to the network
-<pre>```bash sudo netdiscover -i network name```</pre>
+<pre>```bash 
+  sudo netdiscover -i network name
+  ```</pre>
 ![App Screenshot](images/Screenshot%20(160).png)
 
 Scan the target IP for open ports
