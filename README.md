@@ -1,1 +1,1 @@
-![Alt text](images/Screenshot (160).png)
+![App Screenshot](images/Screenshot (160).png)
