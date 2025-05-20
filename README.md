@@ -35,7 +35,7 @@ Basic host discovery and port scanning was done using <code>nmap</code>.
 Port 80 is open. Navigating to the IP in browser leads to a custom webpage.
 </blockquote>
 
-<img src="screenshots/02-web-homepage.png" alt="Web Homepage" width="700"/>
+<img src="images/Screenshot%20(161).png" alt="Web Homepage" width="700"/>
 
 <hr>
 
