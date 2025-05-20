@@ -3,5 +3,5 @@ Scan for all the IP addresses connected to the network
 ![App Screenshot](images/Screenshot%20(160).png)
 
 Scan the target IP for open ports
-<pre>```bash nmap -sC -sV <target IP address> ```</pre>
+<pre> ```bash nmap -sC -sV 192.168.1.100 ``` </pre>
 ![App Screenshot](images/Screenshot%20(161).png)
